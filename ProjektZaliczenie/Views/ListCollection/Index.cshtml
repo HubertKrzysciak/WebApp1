@@ -1,0 +1,88 @@
+@model IEnumerable<ProjektZaliczenie.Entities.Game>
+
+@{
+    ViewData["Title"] = "Games List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int currentPage = ViewData["CurrentPage"] as int? ?? 1;
+    int totalPages = ViewData["TotalPages"] as int? ?? 1;
+    int startPage = ViewData["StartPage"] as int? ?? 1;
+    int endPage = ViewData["EndPage"] as int? ?? totalPages;
+}
+
+<h1>Games List</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Game</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.First().GameName)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Genre.GenreName)</th>
+            <th>Studios</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.GameName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Genre.GenreName)</td>
+                <td>@string.Join(", ", item.GamePublishers.Select(gp => gp.Publisher.PublisherName))</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (totalPages > 1)
+{
+    <nav>
+        <ul class="pagination">
+            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="1">First</a>
+            </li>
+            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)">Previous</a>
+            </li>
+
+            @for (int i = startPage; i <= endPage; i++)
+            {
+                if (i == currentPage)
+                {
+                    <li class="page-item active">
+                        <span class="page-link">@i</span>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                    </li>
+                }
+            }
+
+            @if (endPage < totalPages - 1)
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index" asp-route-page="@totalPages">@totalPages</a>
+                </li>
+            }
+
+            <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)">Next</a>
+            </li>
+            <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="@totalPages">Last</a>
+            </li>
+        </ul>
+    </nav>
+}

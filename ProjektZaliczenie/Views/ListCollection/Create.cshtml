@@ -1,0 +1,22 @@
+@model ProjektZaliczenie.Entities.Game
+
+<h2>Dodaj grę</h2>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="GameName" class="control-label"></label>
+        <input asp-for="GameName" class="form-control" />
+        <span asp-validation-for="GameName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="GenreId" class="control-label"></label>
+        <select asp-items="ViewBag.Publishers" class="form-control" multiple="multiple" name="selectedPublishers"></select>
+        <span asp-validation-for="GenreId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Wydawcy</label>
+        <select asp-items="ViewBag.Publishers" class="form-control" multiple="multiple" name="selectedPublishers"></select>
+    </div>
+    <button type="submit" class="btn btn-primary">Dodaj</button>
+    <a asp-action="Index" class="btn btn-secondary">Anuluj</a>
+</form>
